@@ -1,35 +1,37 @@
 # InteractiveClock
 Python app that displays a modified digital clock in full screen, interacting with viewers catched by a webcam. Preferably to be run on an iMac. Designed for the art exhibition of Xiaojun Song at He Museum, Wuhan, China.
 
-# Install the OpenCV library on your Mac
+Install the OpenCV library on your Mac
+======================================
 Requires Xcode
 
 From the terminal: USERNAME$
 
-Install Homebrew:
-	> sudo xcode-select --install
-	> ruby -e "$(curl -fsSL 	https://raw.githubusercontent.com/Homebrew/install/master/install)"
+Install Homebrew:  
+`> sudo xcode-select --install`  
+`> ruby -e "$(curl -fsSL 	https://raw.githubusercontent.com/Homebrew/install/master/install)"`
 
 Check update:
-	> brew update
+`> brew update`
 
 Put the following lines in a .bash_profile file at the root USERNAME$:
-	# Homebrew
-	export PATH=/usr/local/bin:$PATH
+`# Homebrew
+export PATH=/usr/local/bin:$PATH`
 
 Link the bash_profile:
-	> source ~/.bash_profile
+`> source ~/.bash_profile`
 
 Install OpenCV:
-	> brew tap homebrew/core
-	> brew install opencv3 --with-contrib --with-python3
+`> brew tap homebrew/core`
+`> brew install opencv3 --with-contrib --with-python3`
 
 Link the cv2 library with Python3:
-	> echo 'import sys; sys.path.insert(1, "/usr/local/lib/python3.7/site-packages")' >> /Users/USERNAME/Anaconda3/lib/python3.7/site-packages/homebrew.pth
+`> echo 'import sys; sys.path.insert(1, "/usr/local/lib/python3.7/site-packages")' >> /Users/USERNAME/Anaconda3/lib/python3.7/site-packages/homebrew.pth`
 
-# Bundle the app with PyInstaller
+Bundle the app with PyInstaller
+===============================
 Set the right path for python (e.g. Python3 from Anaconda here):
-(BASH) export PATH=/Users/USERNAME/anaconda3/bin:$PATH
+`(BASH) export PATH=/Users/USERNAME/anaconda3/bin:$PATH`
 
 Create a virtual environment:
 (BASH) python3 -m venv myvenv3
@@ -49,10 +51,10 @@ Install the required modules in your venv:
 
 numpy is already included in the system python, but installing it in the venv prevents broken module imports
 tkinter 8.6 can be directly imported from /Users/USERNAME/anaconda3/lib, check the module path with:
-(BASH-myvenv) python3
+`(BASH-myvenv) python3
 >>>> import tkinter
 >>>> print(tkinter)
->>>> print(tkinter.TkVersion) # check tk version, should be > 8.6
+>>>> print(tkinter.TkVersion) # check tk version, should be > 8.6`
 
 Bundle your app with pyinstaller:
 (BASH-myvenv) pyinstaller interactiveclock.py
