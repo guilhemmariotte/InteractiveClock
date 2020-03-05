@@ -40,16 +40,17 @@ def launch_clock():
     root.quit()
     root.destroy()
     
+    # Open a new window in full screen
     win = GraphWin("InteractiveClock", winwidth, winheight)
     win.master.attributes("-fullscreen", True)
     
     win.setBackground("black")
     #win.setBackground(color_rgb(53,53,53))
-    winwidth2 = 1000
+    winwidth2 = 1000 # set an arbitrary window scale to place the graphical elements
     winscale = winwidth2/winwidth
     winheight2 = winheight*winscale
     win.setCoords(0,0,winwidth2,winheight2)
-    x0 = winwidth2/2
+    x0 = winwidth2/2 # define the point (x0, y0) as the middle of the window
     y0 = winheight2/2
     
     # Load original images and save resized images (adapted for the screen resolution)
@@ -93,7 +94,7 @@ def launch_clock():
     h_clock = h_clock*winscale
     
     # Load and place the clock blocks
-    xblock = [-753,-283,288,757]
+    xblock = [-753,-283,288,757] # abscissa shifts in the window scale (full width of 1000)
     yblock = [3,3,3,3]
     xblock = [winscale*imgscale*x for x in xblock]
     yblock = [winscale*imgscale*x for x in yblock]
