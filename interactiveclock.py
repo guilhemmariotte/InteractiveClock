@@ -7,10 +7,14 @@ author: Guilhem Mariotte
 
 ---
 
-This script requires opencv, numpy, tkinter 8.6, PIL (Pillow)
+This script requires opencv, numpy, tkinter 8.6, PIL (Pillow), graphics
 
-Set the right path for python:
-(BASH) export PATH=/Users/SONG/anaconda3/bin:$PATH
+The OpenCV library must be already installed on your computer (see README)
+
+Use a virtual environment to bundle your app (see README)
+
+Set the right path for python (e.g. Python3 from Anaconda here):
+(BASH) export PATH=/Users/USERNAME/anaconda3/bin:$PATH
 
 Create a virtual environment:
 (BASH) python3 -m venv myvenv3
