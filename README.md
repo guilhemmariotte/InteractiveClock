@@ -3,6 +3,8 @@ Python app that displays a modified digital clock in full screen, interacting wi
 
 Install the OpenCV library on your Mac
 --------------------------------------
+Go to the [OpenCV website](https://opencv.org/) for more information about the library
+
 Requires Xcode
 
 From the terminal: USERNAME$
