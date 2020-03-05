@@ -7,43 +7,11 @@ author: Guilhem Mariotte
 
 ---
 
-This script requires opencv, numpy, tkinter 8.6, PIL (Pillow)
+This script requires opencv, numpy, tkinter 8.6, PIL (Pillow), graphics
 
-Set the right path for python:
-(BASH) export PATH=/Users/SONG/anaconda3/bin:$PATH
+The OpenCV library must be already installed on your computer (see README)
 
-Create a virtual environment:
-(BASH) python3 -m venv myvenv3
-
-Load your environment:
-(BASH) source myvenv3/bin/activate
-
-Check the python path (should give the path of your venv):
-(BASH-myvenv) which python3
-(BASH-myvenv) echo $PATH
-
-Install the required modules in your venv:
-(BASH-myvenv) pip install numpy
-(BASH-myvenv) pip install pyinstaller
-(BASH-myvenv) pip install Pillow
-(BASH-myvenv) pip install opencv-python
-
-numpy is already included in the system python, but installing it in the venv prevents broken module imports
-tkinter 8.6 can be directly imported from /Users/SONG/anaconda3/lib, check the module path with:
-(BASH-myvenv) python3
->>>> import tkinter
->>>> print(tkinter)
->>>> print(tkinter.TkVersion) # check tk version, should be > 8.6
-
-Bundle your app with pyinstaller:
-(BASH-myvenv) pyinstaller interactiveclock.py
-
-Add data and binary files in the spec file:
-binaries=[('/Users/SONG/Desktop/musique_de_Guilhem/Python/interactiveclock/bin/*.dylib','.')],
-datas=[('/Users/SONG/Desktop/musique_de_Guilhem/Python/interactiveclock/*.png','.')],
-
-Bundle the app again with the spec file (to get one .app file, but seems to be equivalent as the onedir option...)
-(BASH-myvenv) pyinstaller --onefile --windowed interactiveclock.spec
+Use a virtual environment to bundle your app using PyInstaller (see README)
 
 """
 
@@ -57,34 +25,35 @@ import cv2
 
 
 # Define the correct path for data when bundling the app
+#------------------------------------------------------------------------------
 def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
+    # Get absolute path to resource, works for dev and for PyInstaller
     base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
     return os.path.join(base_path, relative_path)
 
-# main
+# Main
+#------------------------------------------------------------------------------
 def launch_clock():
     root = tkinter.Tk()
     winwidth = root.winfo_screenwidth()
     winheight = root.winfo_screenheight()
-    #winwidth = 800
-    #winheight = 600
     root.quit()
     root.destroy()
     
-    win = GraphWin("My Animation", winwidth, winheight)
+    # Open a new window in full screen
+    win = GraphWin("InteractiveClock", winwidth, winheight)
     win.master.attributes("-fullscreen", True)
     
     win.setBackground("black")
     #win.setBackground(color_rgb(53,53,53))
-    winwidth2 = 1000
+    winwidth2 = 1000 # set an arbitrary window scale to place the graphical elements
     winscale = winwidth2/winwidth
     winheight2 = winheight*winscale
     win.setCoords(0,0,winwidth2,winheight2)
-    x0 = winwidth2/2
+    x0 = winwidth2/2 # define the point (x0, y0) as the middle of the window
     y0 = winheight2/2
     
-    # Load resize and save images
+    # Load original images and save resized images (adapted for the screen resolution)
     img_temp = Img.open(resource_path('clock2.png'))
     imgscale = 0.9*winwidth/img_temp.size[0]
     w_temp = int(imgscale*img_temp.size[0])
@@ -117,13 +86,15 @@ def launch_clock():
     img_temp.save('temp_clock_block_jian.png')
     
     # Load resized images
+    # Load and place the clock background
     img_clock = Image(Point(x0,y0),resource_path('temp_clock.png'))
     w_clock = img_clock.getWidth()
     w_clock = w_clock*winscale
     h_clock = img_clock.getHeight()
     h_clock = h_clock*winscale
     
-    xblock = [-753,-283,288,757]
+    # Load and place the clock blocks
+    xblock = [-753,-283,288,757] # abscissa shifts in the window scale (full width of 1000)
     yblock = [3,3,3,3]
     xblock = [winscale*imgscale*x for x in xblock]
     yblock = [winscale*imgscale*x for x in yblock]
@@ -164,13 +135,15 @@ def launch_clock():
     # Access the webcam device
     video_cap = cv2.VideoCapture(0)
     
-    # Elapsed time between clock changes
+    # Elapsed time between clock changes [s]
     elapsedtime = 7
     
     while True:
         numfaces = countfaces(video_cap,classifier)
         
         if numfaces > 1:
+            # if at least 2 persons are detected by the webcam
+            # Successively show [X X : X jian], [X ke : X jian], [bu ke : bu jian], [X ke : bu jian], [X X : X X]
             numfaces = 0
             showblock(img_jian4,img_none4,h_block,winheight2)
             numfaces = countfacestime(video_cap,classifier,elapsedtime)
@@ -191,6 +164,8 @@ def launch_clock():
             numfaces = countfacestime(video_cap,classifier,elapsedtime)
             
         elif numfaces > 0:
+            # if at least one person is detected by the webcam
+            # Successively show [X X : X jian], [X ke : X jian], [X X : X X]
             numfaces = 0
             showblock(img_jian4,img_none4,h_block,winheight2)
             numfaces = countfacestime(video_cap,classifier,elapsedtime)
@@ -203,6 +178,8 @@ def launch_clock():
             numfaces = countfacestime(video_cap,classifier,elapsedtime)
             
         else:
+            # if noboby is detected by the webcam:
+            # Successively show [X X : bu jian], [bu ke : X jian], [X X : X X]
             numfaces = 0
             showblock(img_jian4,img_none4,h_block,winheight2)
             showblock(img_bu3,img_none3,h_block,winheight2)
@@ -228,13 +205,16 @@ def launch_clock():
     win.master.destroy()
     
 
+# Return the number of faces (people) detected by the webcam
+#------------------------------------------------------------------------------
 def countfaces(cam,classifier):
     ret, frame_color = cam.read()
     frame_gray = cv2.cvtColor(frame_color, cv2.COLOR_BGR2GRAY)
     frame_faces = classifier.detectMultiScale(frame_gray, 1.3, 5)
     return len(frame_faces)
 
-
+# Return the number of faces (people) detected by the webcam during a given elapsed time
+#------------------------------------------------------------------------------
 def countfacestime(cam,classifier,elapsedtime):
     numfaces = 0
     t0 = time.process_time()
@@ -246,7 +226,8 @@ def countfacestime(cam,classifier,elapsedtime):
             numfaces = len(frame_faces)
     return numfaces
 
-
+# Show an image block (mimic a clock change, the block seems to roll down from the top)
+#------------------------------------------------------------------------------
 def showblock(img,img_n,hb,hw):
     movespeed = 0.5 # time to move the block, s
     framerate = 30 # window update, fps
@@ -261,7 +242,8 @@ def showblock(img,img_n,hb,hw):
         img.move(0,-hb/numframes)
         update(framerate)
     
-
+# Hide an image block (mimic a clock change, the block seems to roll down to the bottom)
+#------------------------------------------------------------------------------
 def hideblock(img,img_n,hb,hw):
     movespeed = 0.5 # time to move the block, s
     framerate = 30 # window update, fps
@@ -276,5 +258,5 @@ def hideblock(img,img_n,hb,hw):
         img.move(0,-hb/numframes)
         update(framerate)
 
-
+# Launch the main
 launch_clock()
