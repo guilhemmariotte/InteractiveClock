@@ -49,14 +49,14 @@ Install the required modules in your venv:
 `(BASH-myvenv) pip install Pillow`  
 `(BASH-myvenv) pip install opencv-python` 
 
-numpy is already included in the system python, but installing it in the venv prevents broken module imports
+numpy is already included in the system python, but installing it in the venv prevents broken module imports.  
 tkinter 8.6 can be directly imported from /Users/USERNAME/anaconda3/lib, check the module path with:  
 `(BASH-myvenv) python3`  
 `>>>> import tkinter`  
 `>>>> print(tkinter)`  
 `>>>> print(tkinter.TkVersion) # check tk version, should be > 8.6`
 
-Bundle your app with pyinstaller:  
+Bundle your app with pyinstaller (this will create the spec file):  
 `(BASH-myvenv) pyinstaller interactiveclock.py`
 
 Add data and binary files in the spec file:  
