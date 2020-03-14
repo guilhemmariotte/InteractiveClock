@@ -62,8 +62,8 @@ Bundle your app with pyinstaller (this will create the spec file):
 `(BASH-myvenv) pyinstaller interactiveclock.py`
 
 Add data and binary files in the spec file.  
-The OpenCV binaries can be found in /usr/local/Cellar/opencv/4.0.1/lib/, copy all of them and put them in a bin/ folder in your working directory.  
-The script also requires the lbpcascade_frontalface.xml file which can be found in /usr/local/Cellar/opencv/4.0.1/share/opencv4/lbpcascades, and the PNG images designed for the app.  
+The OpenCV binaries can be found in `/usr/local/Cellar/opencv/4.0.1/lib/`, copy all of them and put them in a `bin/` folder in your working directory.  
+The script also requires the `lbpcascade_frontalface.xml` file which can be found in `/usr/local/Cellar/opencv/4.0.1/share/opencv4/lbpcascades`, and the PNG images designed for the app.  
 Update the following lines in the spec file:  
 `binaries=[('/Users/USERNAME/interactiveclock/bin/*.dylib','.')],`  
 `datas=[('/Users/USERNAME/interactiveclock/*.png','.'),('/Users/USERNAME/interactiveclock/*.xml','.')],`
