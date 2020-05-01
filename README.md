@@ -1,6 +1,8 @@
 # InteractiveClock
 Python app that displays a modified digital clock in full screen, interacting with viewers detected by a webcam. Preferably to be run on an iMac. Designed for the art exhibition of [Xiaojun Song](http://xiaojunsong.net) at the [United Art Museum](http://www.whuam.com/#/show/detail?id=2cb86e56-83b0-47b6-8159-2d260147ee34), Wuhan, China.
 
+![Image](clock_template1.png "image")
+
 Install the OpenCV library on your Mac
 --------------------------------------
 Go to the [OpenCV website](https://opencv.org/) for more information about the library
